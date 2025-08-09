@@ -136,6 +136,9 @@ const allExpensesTbody = document.getElementById('all-expenses-tbody');
 const generateReportBtn = document.getElementById('generate-report-btn');
 const startDateInput = document.getElementById('start-date');
 const endDateInput = document.getElementById('end-date');
+// নতুন ফিল্টারের জন্য DOM এলিমেন্ট
+const monthFilterSelect = document.getElementById('month-filter');
+const yearFilterInput = document.getElementById('year-filter');  
 const expenseReportArea = document.getElementById('expense-report-area');
 const depositReportArea = document.getElementById('deposit-report-area');
 const downloadPdfBtn = document.getElementById('download-pdf-btn');
@@ -542,8 +545,60 @@ async function generateDepositReport(startDateStr, endDateStr) {
     } catch (error) { console.error("জমা রিপোর্ট তৈরিতে সমস্যা: ", error); depositReportArea.innerHTML = '<p class="initial-message">একটি সমস্যা হয়েছে।</p>'; }
 }
 
-
-if (generateReportBtn) generateReportBtn.addEventListener('click', () => { const startDate = startDateInput.value; const endDate = endDateInput.value; if (expenseReportBtn.classList.contains('active')) { generateExpenseReport(startDate, endDate); } else if (depositReportBtn.classList.contains('active')) { generateDepositReport(startDate, endDate); } });
+ // ============= নতুন এবং উন্নত কোড ব্লক =============
+if (generateReportBtn) {
+    generateReportBtn.addEventListener('click', () => {
+        // মাস ও বছর ফিল্টার থেকে মান নিন
+        const selectedMonth = monthFilterSelect.value;
+        const selectedYear = yearFilterInput.value;
+        
+        let startDate, endDate; // তারিখ রাখার জন্য দুটি ভ্যারিয়েবল
+        
+        // ধাপ ১: চেক করুন ব্যবহারকারী মাস ও বছর সিলেক্ট করেছে কি না
+        if (selectedMonth && selectedYear) {
+            // যদি করে থাকে, তাহলে সেই মাসের প্রথম ও শেষ তারিখ গণনা করুন
+            
+            // মাসের প্রথম দিন (उदा: new Date(2025, 0, 1) -> জানুয়ারি ১, ২০২৫)
+            const firstDayOfMonth = new Date(selectedYear, selectedMonth, 1);
+            
+            // মাসের শেষ দিন (পরের মাসের ০-তম দিন মানেই এই মাসের শেষ দিন)
+            const lastDayOfMonth = new Date(selectedYear, parseInt(selectedMonth) + 1, 0);
+            
+            // তারিখ দুটিকে YYYY-MM-DD ফরম্যাটে রূপান্তর করুন
+            startDate = firstDayOfMonth.toISOString().split('T')[0];
+            endDate = lastDayOfMonth.toISOString().split('T')[0];
+            
+            // উপরের তারিখের ইনপুট ফিল্ড দুটিকে আপডেট করে দিন, যাতে ব্যবহারকারী বুঝতে পারে কোন তারিখের রিপোর্ট দেখানো হচ্ছে
+            startDateInput.value = startDate;
+            endDateInput.value = endDate;
+            
+            // একটি সুন্দর নোটিফিকেশন দেখান
+            showToast('info', `${firstDayOfMonth.toLocaleDateString('bn-BD', {month: 'long'})} মাসের রিপোর্ট লোড হচ্ছে...`);
+            
+            // কাজ শেষে মাস ও বছরের ইনপুট ফিল্ড খালি করে দিন
+            monthFilterSelect.value = '';
+            yearFilterInput.value = '';
+            
+        } else {
+            // ধাপ ২: যদি মাস-বছর সিলেক্ট না করা হয়, তাহলে আগের মতোই তারিখের ইনপুট থেকে মান নিন
+            startDate = startDateInput.value;
+            endDate = endDateInput.value;
+        }
+        
+        // ধাপ ৩: নির্ধারিত startDate ও endDate দিয়ে রিপোর্ট জেনারেট করুন (এই অংশ আগের মতোই)
+        if (!startDate || !endDate) {
+            showToast('warning', 'অনুগ্রহ করে তারিখ নির্বাচন করুন।');
+            return;
+        }
+        
+        if (expenseReportBtn.classList.contains('active')) {
+            generateExpenseReport(startDate, endDate);
+        } else if (depositReportBtn.classList.contains('active')) {
+            generateDepositReport(startDate, endDate);
+        }
+    });
+}
+// ======================================================
 
 if (expenseReportBtn) expenseReportBtn.addEventListener('click', () => { 
     expenseReportBtn.classList.add('active'); 

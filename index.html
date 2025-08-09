@@ -171,12 +171,44 @@
                     <button class="back-btn"><span class="material-icons-sharp">arrow_back_ios</span></button>
                     <h1>রিপোর্ট</h1>
                 </div>
+                
                 <div class="report-controls">
-                    <div class="form-group"><label for="start-date">শুরুর তারিখ</label><input type="date" id="start-date"></div>
-                    <div class="form-group"><label for="end-date">শেষের তারিখ</label><input type="date" id="end-date"></div>
-                    <button id="generate-report-btn" style="width: 200px; height: 50px; background-color: teal; color: white; border-radius: 10px;">রিপোর্ট দেখুন</button>
-                    <button id="download-pdf-btn" style="display: none;width: 200px; height: 50px; background-color: rgba(20, 54, 222, 1); color: white; border-radius: 10px;">PDF ডাউনলোড</button>
-                </div>
+    <!-- তারিখ অনুযায়ী রিপোর্ট -->
+    <div class="form-group"><label for="start-date">শুরুর তারিখ</label><input type="date" id="start-date"></div>
+    <div class="form-group"><label for="end-date">শেষের তারিখ</label><input type="date" id="end-date"></div>
+    
+    <!--Divider-->
+    <div style="width: 100%; border-top: 1px solid var(--color-dark-variant); margin: 1rem 0;"></div>
+    
+    <!-- মাস অনুযায়ী রিপোর্ট (নতুন অংশ) -->
+    <div class="form-group">
+        <label for="month-filter">অথবা মাস সিলেক্ট করুন</label>
+        <select id="month-filter" class="custom-select">
+            <option value="">-- মাস --</option>
+            <option value="0">জানুয়ারি</option>
+            <option value="1">ফেব্রুয়ারি</option>
+            <option value="2">মার্চ</option>
+            <option value="3">এপ্রিল</option>
+            <option value="4">মে</option>
+            <option value="5">জুন</option>
+            <option value="6">জুলাই</option>
+            <option value="7">আগস্ট</option>
+            <option value="8">সেপ্টেম্বর</option>
+            <option value="9">অক্টোবর</option>
+            <option value="10">নভেম্বর</option>
+            <option value="11">ডিসেম্বর</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="year-filter">বছর</label>
+        <input type="number" id="year-filter" placeholder="যেমন: 2025">
+    </div>
+    
+    <!-- বাটনগুলো -->
+    <button id="generate-report-btn" style="width: 200px; height: 50px; background-color: teal; color: white; border-radius: 10px;">রিপোর্ট দেখুন</button>
+    <button id="download-pdf-btn" style="display: none;width: 200px; height: 50px; background-color: rgba(20, 54, 222, 1); color: white; border-radius: 10px;">PDF ডাউনলোড</button>
+</div>
+   
                  <div class="report-view-options">
                     <button id="expense-report-btn" class="view-btn active">খরচ রিপোর্ট</button>
                     <button id="deposit-report-btn" class="view-btn">জমা রিপোর্ট</button>

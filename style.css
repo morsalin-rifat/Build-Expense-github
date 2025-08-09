@@ -369,3 +369,24 @@ form button[type="submit"]:hover { opacity: .9; }
   font-weight:bold;
   
 }
+/* রিপোর্ট ফিল্টারের জন্য অতিরিক্ত স্টাইল */
+.report-controls input[type="number"] {
+    padding: .8rem;
+    border-radius: var(--border-radius-1);
+    background: var(--input-bg);
+    color: var(--text-color);
+    font-size: 1rem;
+    border: 1px solid var(--color-dark-variant);
+    width: 100%; /* সম্পূর্ণ প্রস্থ দেওয়ার জন্য */
+}
+
+.report-controls .custom-select {
+    padding: .8rem;
+    border-radius: var(--border-radius-1);
+    background: var(--input-bg);
+    color: var(--text-color);
+    font-size: 1rem;
+    border: 1px solid var(--color-dark-variant);
+    width: 100%;
+    font-family: 'Noto Sans Bengali', sans-serif;
+}
