@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark">
+    <title>নির্মাণ হিসাব</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+</head>
+<body>
+    
+    <!-- ===== স্ল্যাশ স্ক্রিন শুরু ===== -->
+<div id="splash-screen">
+    <!-- অ্যানিমেটেড শেপ কন্টেইনার -->
+    <div class="shape-container">
+        <div class="shape-transformer"></div>
+    </div>
+    
+    <!-- টেক্সট কন্টেইনার -->
+    <div class="text-container">
+        <h1 style="font-family:Georgia,serif;">Build Expense</h1>
+        <p class="subtitle"></p> <!-- JS দিয়ে টাইপিং ইফেক্ট এখানে আসবে -->
+    </div>
+    
+    <!-- ফাইনাল ওয়েভ ট্রানজিশন -->
+    <div class="wave-transition"></div>
+    
+    <!-- সাউন্ড ফাইল (অনলাইন লিংক) -->
+    <audio id="drop-sound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_247a3291d8.mp3" preload="auto"></audio>
+ <audio id="success-sound" src="sounds/success.mp3" preload="auto"></audio>
+<audio id="delete-sound" src="sounds/delete.mp3" preload="auto"></audio>
+<audio id="error-sound" src="sounds/error.mp3" preload="auto"></audio>
+</div>
+
+
+<!-- ===== স্ল্যাশ স্ক্রিন শেষ ===== -->
+
+    <div class="app-container" style="display:none;">
+        <!-- ==================== সাইডবার ==================== -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>নির্মাণ হিসাব</h3>
+                <span class="material-icons-sharp" id="close-btn">close</span>
+            </div>
+           <!-- ==================== সম্পূর্ণ সাইডবার মেন্যু ==================== -->
+            <div class="sidebar-menu">
+                <a href="#dashboard-page" class="menu-item active">
+                    <span class="material-icons-sharp">dashboard</span>
+                    <h3>ড্যাশবোর্ড</h3>
+                </a>
+                <a href="#" class="menu-item" id="sidebar-add-expense">
+                    <span class="material-icons-sharp">receipt_long</span>
+                    <h3>নতুন খরচ</h3>
+                </a>
+                <a href="#expense-list-page" class="menu-item">
+                    <span class="material-icons-sharp">list_alt</span>
+                    <h3>খরচের তালিকা</h3>
+                </a>
+                <a href="#deposit-page" class="menu-item" id="sidebar-add-deposit">
+                    <span class="material-icons-sharp">add_card</span>
+                    <h3>নতুন জমা</h3>
+                </a>
+                <a href="#report-page" class="menu-item">
+                    <span class="material-icons-sharp">summarize</span>
+                    <h3>রিপোর্ট</h3>
+                </a>
+                <a href="#analysis-page" class="menu-item">
+                    <span class="material-icons-sharp">analytics</span>
+                    <h3>অ্যাডভান্স অ্যানালাইসিস</h3>
+                </a>
+                <!-- নতুন 'আমাদের সম্পর্কে' মেন্যু -->
+                <a href="#about-page" class="menu-item">
+                    <span class="material-icons-sharp">info</span>
+                    <h3>আমাদের সম্পর্কে</h3>
+                </a>
+                <a href="#settings-page" class="menu-item">
+                    <span class="material-icons-sharp">settings</span>
+                    <h3>সেটিংস</h3>
+                </a>
+            </div>
+        </aside>
+
+        <!-- ==================== প্রধান কন্টেন্ট ==================== -->
+        <main class="main-content">
+            <header class="main-header">
+                <button id="menu-btn">
+                    <span class="material-icons-sharp">menu</span>
+                </button>
+                <div class="user-profile">
+                    <span>স্বাগতম!</span>
+                    <div class="profile-photo"></div>
+                </div>
+            </header>
+
+            <!-- ড্যাশবোর্ডের পাতা -->
+            <div class="page-content" id="dashboard-page">
+                <h1>ড্যাশবোর্ড</h1>
+                <div class="theme-toggler">
+                    <span class="material-icons-sharp active">light_mode</span>
+                    <span class="material-icons-sharp">dark_mode</span>
+                </div>
+                <div class="summary-cards">
+                    <div class="card"><h3>বর্তমান ব্যালেন্স</h3><h2 id="balance-el">৳ 0</h2></div>
+                    <div class="card"><h3>মোট জমা</h3><p id="total-deposit-el">৳ 0</p></div>
+                    <div class="card"><h3>মোট খরচ</h3><p id="total-expense-el">৳ 0</p></div>
+                </div>
+                <div class="quick-actions">
+                    <button id="add-expense-btn">+ নতুন খরচ</button>
+                </div>
+                <div class="recent-activities">
+                    <h2>সাম্প্রতিক কার্যকলাপ</h2>
+                    <ul id="recent-activities-list"><li>লোড হচ্ছে...</li></ul>
+                </div>
+            </div>
+            
+            <!-- আমাদের সম্পর্কে পেজ (নতুন) -->
+            <div class="page-content" id="about-page" style="display: none;">
+                <div class="page-header">
+                    <button class="back-btn"><span class="material-icons-sharp">arrow_back_ios</span></button>
+                    <h1>এপ সম্পর্কে</h1>
+                </div>
+
+                <div class="about-container">
+                    <div class="about-card">
+                        <h3>Construction হিসাব WebApp</h3>
+                        <p><strong>ভার্সন:</strong> 1.0.0</p>
+                        <p>এই অ্যাপ্লিকেশনটি নির্মাণ প্রকল্পের দৈনন্দিন জমা ও খরচ নির্ভুলভাবে হিসাব রাখার জন্য তৈরি করা হয়েছে।</p>
+                   
+                 
+                    </div>
+
+                    
+
+                    <div class="about-card">
+                        <h3>প্রধান ফিচারসমূহ</h3>
+                        <ul>
+                            <li>দৈনন্দিন খরচ এবং জমার হিসাব রাখা।</li>
+                            <li>স্বয়ংক্রিয় ব্যালেন্স গণনা।</li>
+                            <li>তারিখ অনুযায়ী বিস্তারিত রিপোর্ট তৈরি এবং PDF ডাউনলোড।</li>
+                            <li>খাত অনুযায়ী খরচের গ্রাফিক্যাল বিশ্লেষণ।</li>
+                            <li>ডার্ক এবং লাইট মোড থিম।</li>
+                        </ul>
+                    </div>
+
+                    <div class="about-card">
+                        <h3>পরবর্তী  আপডেটে যা আসতে পারে</h3>
+                        <ul>
+                            <li>একাধিক প্রজেক্ট ব্যবস্থাপনার সুবিধা।</li>
+                            <li>ডাটা ব্যাকআপ এবং রিস্টোর অপশন।</li>
+                            <li>Excel file Import</li>
+                            <li>নোটিফকেশন সিস্টেম আপডেট</li>
+                            <li>ব্যবহারকারী লগইন সিস্টেম।</li>
+                            <li>AI মডেলের উন্নত ব্যাবহার</li>
+                            <li>Email Subscription ফিচার</li>
+                            <li>আরও উন্নত রিপোর্টিং ফিচার।</li>
+                        </ul>
+            
+                <p id="fusion-id">
+                    -Fusion Automation Project.
+                </p>
+               </div>
+                    
+                </div>
+            </div>
+
+            <!-- রিপোর্ট পেজের পাতা -->
+            <div class="page-content" id="report-page" style="display: none;">
+                <div class="page-header">
+                    <button class="back-btn"><span class="material-icons-sharp">arrow_back_ios</span></button>
+                    <h1>রিপোর্ট</h1>
+                </div>
+                <div class="report-controls">
+                    <div class="form-group"><label for="start-date">শুরুর তারিখ</label><input type="date" id="start-date"></div>
+                    <div class="form-group"><label for="end-date">শেষের তারিখ</label><input type="date" id="end-date"></div>
+                    <button id="generate-report-btn" style="width: 200px; height: 50px; background-color: teal; color: white; border-radius: 10px;">রিপোর্ট দেখুন</button>
+                    <button id="download-pdf-btn" style="display: none;width: 200px; height: 50px; background-color: rgba(20, 54, 222, 1); color: white; border-radius: 10px;">PDF ডাউনলোড</button>
+                </div>
+                 <div class="report-view-options">
+                    <button id="expense-report-btn" class="view-btn active">খরচ রিপোর্ট</button>
+                    <button id="deposit-report-btn" class="view-btn">জমা রিপোর্ট</button>
+                </div>
+                 <!-- খরচ রিপোর্টের জন্য এলাকা -->
+                <div class="report-display-area" id="expense-report-area">
+                    <p class="initial-message">রিপোর্ট তৈরি করার জন্য অনুগ্রহ করে উপরের তারিখ নির্বাচন করে "রিপোর্ট দেখুন" বাটনে ক্লিক করুন।</p>
+                </div>
+                <!-- জমা রিপোর্টের জন্য এলাকা (ডিফল্টভাবে লুকানো) -->
+                <div class="report-display-area" id="deposit-report-area" style="display: none;">
+                    <!-- জমা রিপোর্ট এখানে আসবে -->
+                </div>
+            </div>
+            
+            <!-- অ্যানালাইসিস পেজের কন্টেন্ট -->
+            <div class="page-content" id="analysis-page" style="display: none;">
+                <div class="page-header">
+                    <button class="back-btn"><span class="material-icons-sharp">arrow_back_ios</span></button>
+                    <h1>খরচের বিশ্লেষণ</h1>
+                </div>
+                <div class="analysis-container">
+                    <div class="chart-card">
+                        <h3>খাত অনুযায়ী খরচের বণ্টন</h3>
+                        <canvas id="expense-pie-chart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3>টপ ৫টি খরচের খাত</h3>
+                        <canvas id="top-expenses-bar-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- খরচ তালিকা পেজের কন্টেন্ট -->
+            <div class="page-content" id="expense-list-page" style="display: none;">
+                <div class="page-header">
+                    <button class="back-btn"><span class="material-icons-sharp">arrow_back_ios</span></button>
+                    <h1>সমস্ত খরচের তালিকা</h1>
+                </div>
+                <div class="table-view-container" style="margin-top: 2rem;">
+                    <table class="report-table" id="all-expenses-table">
+                        <thead>
+                            <tr>
+                                <th>তারিখ</th>
+                                <th>বিবরণ</th>
+                                <th>মোট টাকা</th>
+                                <th>অ্যাকশন</th>
+                            </tr>
+                        </thead>
+                        <tbody id="all-expenses-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- জমা পেজের কন্টেন্ট -->
+            <div class="page-content" id="deposit-page" style="display: none;">
+                <div class="page-header">
+                    <button class="back-btn"><span class="material-icons-sharp">arrow_back_ios</span></button>
+                    <h1>জমা ব্যবস্থাপনা</h1>
+                </div>
+                <div class="tab-container">
+                    <div class="tab-buttons">
+                        <button class="tab-btn active" data-tab="investor-management">ইনভেস্টর ম্যানেজমেন্ট</button>
+                        <button class="tab-btn" data-tab="payment-entry">পেমেন্ট এন্ট্রি</button>
+                    </div>
+                    <div class="tab-content-area">
+                        <!-- ইনভেস্টর ম্যানেজমেন্ট ট্যাব -->
+                        <div id="investor-management" class="tab-content active">
+                            <form id="investor-form">
+                                <div class="form-group">
+                                    <label for="investor-name">ইনভেস্টরের নাম</label>
+                                    <input type="text" id="investor-name" placeholder="সম্পূর্ণ নাম লিখুন" required>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="yearly-amount">বাৎসরিক অ্যামাউন্ট (৳)</label>
+                                        <input type="number" id="yearly-amount" placeholder="বাৎসরিক জমার পরিমাণ" step="any">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="monthly-amount">মান্থলি অ্যামাউন্ট (৳)</label>
+                                        <input type="number" id="monthly-amount" placeholder="স্বয়ংক্রিয়ভাবে আসবে" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="investor-remarks">মন্তব্য (ঐচ্ছিক)</label>
+                                    <input type="text" id="investor-remarks" placeholder="যেমন: Brick, etc.">
+                                </div>
+                                <button type="submit">ইনভেস্টর যোগ করুন</button>
+                            </form>
+                            <div class="table-view-container" style="margin-top: 2rem;">
+                                <h3>ইনভেস্টরদের তালিকা</h3>
+                                <table class="report-table" id="investors-list-table">
+                                    <thead><tr><th>নাম</th><th>মান্থলি অ্যামাউন্ট</th><th>মন্তব্য</th><th>অ্যাকশন</th></tr></thead>
+                                    <tbody id="investors-list-tbody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- পেমেন্ট এন্ট্রি ট্যাব -->
+                        <div id="payment-entry" class="tab-content">
+                            <form id="payment-form">
+                                <div class="form-group">
+                                    <label for="payment-investor">ইনভেস্টর নির্বাচন করুন</label>
+                                    <select id="payment-investor" required>
+                                        <option value="" disabled selected>ইনভেস্টর সিলেক্ট করুন</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="payment-monthly-amount">নির্ধারিত মাসিক অ্যামাউন্ট</label>
+                                    <input type="text" id="payment-monthly-amount" readonly placeholder="ইনভেস্টর সিলেক্ট করুন">
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="payment-month">কোন মাসের জন্য</label>
+                                        <input type="month" id="payment-month" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="paid-amount">জমার পরিমাণ (Paid Amount)</label>
+                                        <input type="number" id="paid-amount" placeholder="0.00" step="any" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="payment-note">নোট (ঐচ্ছিক)</label>
+                                    <input type="text" id="payment-note" placeholder="পেমেন্ট সম্পর্কিত নোট">
+                                </div>
+                                <button type="submit">সেভ করুন</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+             <!-- সেটিংস পাতা (খালি) -->
+             <div class="page-content" id="settings-page" style="display: none;">
+                 <h1>সেটিংস</h1>
+                 <p>এই পাতাটি ভবিষ্যতে যোগ করা হবে।</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- নতুন খরচ যোগ করার মডেল -->
+    <div class="modal-container" id="expense-modal">
+        <div class="modal-content">
+            <span class="modal-close-btn">×</span>
+            <h2>নতুন খরচ যোগ করুন</h2>
+            <form id="expense-form">
+                <div class="form-group"><label for="expense-date">তারিখ</label><input type="date" id="expense-date" required></div>
+                <div class="form-group">
+                    <label for="expense-category">খরচের খাত</label>
+                    <select id="expense-category" required>
+                        <option value="" disabled selected>একটি খাত নির্বাচন করুন</option>
+                        <option value="ইট">ইট</option><option value="বালু">বালু</option><option value="সিমেন্ট">সিমেন্ট</option><option value="রড">রড</option><option value="লেবার">লেবার</option><option value="পাইপ ফিটিংস">পাইপ ফিটিংস</option><option value="বিদ্যুৎ বিল">বিদ্যুৎ বিল</option><option value="পরিবহন">পরিবহন</option><option value="অন্যান্য">অন্যান্য (নিচে লিখুন)</option>
+                    </select>
+                    <input type="text" id="other-expense-name" placeholder="এখানে খরচের নাম লিখুন" style="display: none; margin-top: 1rem;">
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label for="expense-qty">পরিমাণ</label><input type="number" id="expense-qty" placeholder="0" step="any" required></div>
+                    <div class="form-group"><label for="expense-rate">দর (Rate)</label><input type="number" id="expense-rate" placeholder="0.00" step="any" required></div>
+                </div>
+                <div class="form-group"><label for="total-amount">মোট টাকা</label><input type="text" id="total-amount" readonly placeholder="স্বয়ংক্রিয়ভাবে আসবে"></div>
+                <button type="submit">সেভ করুন</button>
+            </form>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="script.js" type="module"></script>
+</body>
+</html>
